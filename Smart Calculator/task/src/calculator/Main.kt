@@ -2,11 +2,14 @@ package calculator
 
 import calculator.Operator.Companion.leftBracket
 import calculator.Operator.Companion.rightBracket
-import calculator.Stacks.BigIntegerStack
-import calculator.Stacks.InputStack
-import calculator.Stacks.OperatorStack
+import calculator.exceptions.InvalidAssignmentException
+import calculator.exceptions.InvalidExpressionException
+import calculator.exceptions.InvalidIdentifierException
+import calculator.exceptions.UnknownCommandException
+import calculator.stacks.BigIntegerStack
+import calculator.stacks.InputStack
+import calculator.stacks.OperatorStack
 import java.math.BigInteger
-
 
 fun main() {
     Calculator.run()
@@ -68,8 +71,8 @@ object Calculator {
 
 
     private fun calculate(input: String): BigInteger {
-        val inputList = prepareInput(input)
-        val postfixInput = convertToPostfix(inputList)
+        val preparedInput = prepareInput(input)
+        val postfixInput = convertToPostfix(preparedInput)
         val stack = BigIntegerStack()
         postfixInput.forEach { incoming ->
             when {
@@ -84,8 +87,8 @@ object Calculator {
 
     private fun prepareInput(input: String): InputStack {
         if (input.count { it == '(' } != input.count { it == ')' } || input.contains("[*/]{2,}".toRegex())) throw InvalidAssignmentException()
-        val output = InputStack()
         val smoothInput = input.removeRedundantOperators()
+        val output = InputStack()
         smoothInput.forEach { char ->
             when {
                 char.isValidOperator() -> {
@@ -111,11 +114,10 @@ object Calculator {
     }
 
 
-    private fun convertToPostfix(inputList: InputStack): InputStack {
-
+    private fun convertToPostfix(preparedInput: InputStack): InputStack {
         val stack = OperatorStack()
         val output = InputStack()
-        inputList.forEach { incoming ->
+        preparedInput.forEach { incoming ->
             when {
                 incoming.isValidVariableName() || incoming.isNumeric() -> output.push(incoming)
 

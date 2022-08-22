@@ -1,12 +1,11 @@
-package calculator.Stacks
+package calculator.stacks
 
-import calculator.InvalidOperationException
+import calculator.exceptions.InvalidOperationException
 import java.math.BigInteger
 
 class BigIntegerStack : Stack<BigInteger> {
     fun calculate(incoming: String) {
-        val first = this.pop()
-        val second = this.pop()
+        val (first, second) = List(2) { this.pop() }
         val result = when (incoming) {
             "+" -> first + second
             "-" -> second - first

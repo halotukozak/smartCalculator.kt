@@ -1,17 +1,15 @@
-package calculator.Stacks
+package calculator.stacks
 
-import calculator.EmptyStackException
+import calculator.exceptions.EmptyStackException
 
 interface Stack<T> {
     val storage: MutableList<T>
-    fun asString(): String {
-        return buildString {
-            appendLine("----top----")
-            storage.asReversed().forEach {
-                appendLine(it)
-            }
-            appendLine("-----------")
+    fun asString(): String = buildString {
+        appendLine("----top----")
+        storage.asReversed().forEach {
+            appendLine(it)
         }
+        appendLine("-----------")
     }
 
     fun push(element: T) = storage.add(element)

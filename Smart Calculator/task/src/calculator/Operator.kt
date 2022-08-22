@@ -1,5 +1,7 @@
 package calculator
 
+import calculator.exceptions.InvalidOperationException
+
 class Operator(operator: String = "") {
     private val stringOperator = operator
     override fun toString(): String = stringOperator
